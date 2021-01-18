@@ -1,14 +1,20 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import error404 from "../views/error404/error404";
+import login from "../group/login/login";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "*",
+    name: "error404",
+    component: error404
+  },
+  {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "Login",
+    component: login
   },
   {
     path: "/about",
