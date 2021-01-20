@@ -60,7 +60,7 @@ export default {
       if (lst != null && lst !== "/login") {
         this.$router.push(localStorage.getItem("last"));
         localStorage.removeItem("last");
-      } else this.$router.push("/student");
+      } else this.$router.push(localStorage.getItem("mainPage"));
     }
   },
   methods: {
@@ -70,13 +70,12 @@ export default {
         url: "api/login",
         method: "post",
         data: {
-          userId: this.userId,
-          password: this.password
+          userId: this.UserId,
+          password: this.Password
         }
       })
         .then(res => {
           if (res.data.code === 200) {
-            console.log("res:", res.data);
             this.loading = false;
             //登陆成功直接进入普通用户界面
             this.$Message.success("登录成功！");
@@ -84,15 +83,19 @@ export default {
             localStorage.setItem("userid", res.data.data.userId);
             localStorage.setItem("username", res.data.data.name);
             localStorage.setItem("identity", res.data.data.identity);
+            localStorage.setItem(
+              "mainPage",
+              this.getMainPage(res.data.data.identity)
+            );
             if (localStorage.getItem("last")) {
               let lst = localStorage.getItem("last");
               if (lst === "/login") {
-                this.$router.push("/user");
+                this.$router.push(localStorage.getItem("mainPage"));
               } else {
                 this.$router.push(localStorage.getItem("last"));
                 localStorage.removeItem("last");
               }
-            } else this.$router.push("/user");
+            } else this.$router.push(localStorage.getItem("mainPage"));
           } else {
             this.$Message.error(res.data.message);
             this.loading = false;
@@ -103,6 +106,15 @@ export default {
           this.$Message.error("登录失败，请检查网络连接！");
           this.loading = false;
         });
+    },
+    getMainPage(identity) {
+      if (identity.indexOf("教师") !== -1) {
+        return "/teacher";
+      } else if (identity.indexOf("学生") !== -1) {
+        return "/student";
+      } else if (identity.indexOf("管理员") !== -1) {
+        return "/admin";
+      }
     }
   }
 };

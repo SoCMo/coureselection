@@ -1,5 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
+import "@/interceptors";
 import router from "./router";
 import ViewUI from "view-design";
 

@@ -1,5 +1,7 @@
+const debug = process.env.NODE_ENV !== "production";
+
 module.exports = {
-  publicPath: "./",
+  publicPath: "/",
   outputDir: "dist",
   assetsDir: "assets",
   devServer: {
@@ -11,9 +13,18 @@ module.exports = {
     https: false, // 启用https
     proxy: {
       "/api": {
-        target: "http://localhost:8088",
-        changeOrigin: true
+        target: "http://localhost:8089/api",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": "/"
+        }
       }
+    }
+  },
+  configureWebpack: config => {
+    if (debug) {
+      // 开发环境配置
+      config.devtool = "source-map";
     }
   }
 };
