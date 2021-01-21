@@ -11,261 +11,74 @@
         </Button>
         <Modal
           v-model="modal_create"
-          title="创建会议室"
+          title="创建课程"
           :loading="loading"
           width="1000"
           ok-text="提交"
-          @on-ok="createConference"
+          @on-ok="createCourse"
         >
           <Form :model="conference_info" :label-width="100">
             <Row>
               <Col span="8">
-                <FormItem label="房间号">
+                <FormItem label="课程号">
+                  <Input
+                    v-model="conference_info.id"
+                    placeholder="例:1(必填)"
+                  ></Input>
+                </FormItem>
+                <FormItem label="课程名">
                   <Input
                     v-model="conference_info.name"
-                    placeholder="例:D602(必填)"
+                    placeholder="例:数据库原理(1)(必填)"
                   ></Input>
                 </FormItem>
-                <FormItem label="所属校区">
-                  <Input
-                    v-model="conference_info.campus"
-                    placeholder="例:宝山校区(必填)"
-                  ></Input>
+                <FormItem label="教师号">
+                  <InputNumber
+                    v-model="conference_info.teacherId"
+                    :min="1"
+                    placeholder="例:1(必填)"
+                  ></InputNumber>
                 </FormItem>
-                <FormItem label="所属大楼">
+                <FormItem label="教师名">
                   <Input
-                    v-model="conference_info.building"
-                    placeholder="例:D楼(必填)"
-                  ></Input>
-                </FormItem>
-                <FormItem label="联系电话">
-                  <Input
-                    v-model="conference_info.phone"
-                    placeholder="例:13xxxxxxxxx(必填)"
-                  ></Input>
-                </FormItem>
-                <FormItem label="取钥匙地点">
-                  <Input
-                    v-model="conference_info.addressKey"
+                    v-model="conference_info.teacherName"
                     placeholder="(必填)"
                   ></Input>
                 </FormItem>
-                <FormItem label="会议室面积">
+                <FormItem label="学分">
                   <InputNumber
-                    v-model="conference_info.areasize"
+                    v-model="conference_info.credit"
                     :min="1"
                   ></InputNumber>
                 </FormItem>
-                <FormItem label="座位数">
-                  <InputNumber
+                <FormItem label="上课地点">
+                  <Input
+                    v-model="conference_info.address"
+                    placeholder="例A315(必填)"
+                  ></Input>
+                </FormItem>
+                <FormItem label="上课时间">
+                  <Input
                     v-model="conference_info.seatnumber"
-                    :min="1"
-                  ></InputNumber>
-                </FormItem>
-                <FormItem label="屏幕尺寸">
-                  <Input
-                    v-model="conference_info.screensize"
-                    placeholder="若没有则不填"
+                    placeholder="例:二:2-4;五:7-8"
                   ></Input>
                 </FormItem>
-                <FormItem label="维保成本">
+                <FormItem label="选课容量">
                   <InputNumber
-                    v-model="conference_info.maintaincost"
-                    :min="1"
+                    v-model="conference_info.capacity"
+                    :min = "1"
                   ></InputNumber>
                 </FormItem>
-              </Col>
-              <Col span="8">
-                <FormItem label="对外开放">
-                  <RadioGroup v-model="conference_info.isAble">
-                    <Radio :label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio :label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="对学生开放">
-                  <RadioGroup v-model="conference_info.studentAble">
-                    <Radio :label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio :label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="对老师开放">
-                  <RadioGroup v-model="conference_info.teacherAble">
-                    <Radio :label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio :label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="座椅摆放">
-                  <RadioGroup v-model="conference_info.seatsize">
-                    <Radio :label="0">
-                      <span>圆桌式</span>
-                    </Radio>
-                    <Radio :label="1">
-                      <span>剧院式</span>
-                    </Radio>
-                    <Radio :label="2">
-                      <span>U形</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="房间用途">
-                  <RadioGroup v-model="conference_info.roomfunction">
-                    <Radio label="会议">
-                      <span>会议</span>
-                    </Radio>
-                    <Radio label="培训">
-                      <span>培训</span>
-                    </Radio>
-                    <Radio label="兼有">
-                      <span>兼有</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="多功能">
-                  <RadioGroup v-model="conference_info.ismultifunc">
-                    <Radio :label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio :label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="有话筒">
-                  <RadioGroup v-model="conference_info.hasspeaker">
-                    <Radio :label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio :label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-                <FormItem label="有茶水">
-                  <RadioGroup v-model="conference_info.haswater">
-                    <Radio :label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio :label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-              </Col>
-              <Col span="8">
-                <FormItem label="麦克风情况">
-                  <Input
-                    v-model="conference_info.microphonecondition"
-                    placeholder="选填"
-                  ></Input>
-                </FormItem>
-                <FormItem label="备注">
-                  <Input
-                    v-model="conference_info.otherdevicecondition"
-                    placeholder="选填"
-                  ></Input>
-                </FormItem>
-                <div>
-                  <p style="text-align: center; margin-bottom: 10px">
-                    最早可提前预约天数：
-                  </p>
-                  <FormItem label="学生">
-                    <InputNumber
-                      v-model="conference_info.studentDays"
-                      :min="1"
-                    ></InputNumber>
-                  </FormItem>
-                  <FormItem label="同部门教师">
-                    <InputNumber
-                      v-model="conference_info.sameTeacherDays"
-                      :min="1"
-                    ></InputNumber>
-                  </FormItem>
-                  <FormItem label="其他部门教师">
-                    <InputNumber
-                      v-model="conference_info.diffTeacherDays"
-                      :min="1"
-                    ></InputNumber>
-                  </FormItem>
-                </div>
-                <div>上传会议室照片(可不传)</div>
-                <Upload
-                  multiple
-                  type="drag"
-                  :headers="uploadHeaders"
-                  :format="['jpg', 'jpeg', 'png']"
-                  :on-format-error="handleFormatError"
-                  :on-success="uploadSuccess"
-                  :on-error="uploadError"
-                  action="http://10.10.10.81/api/file/upload"
-                >
-                  <div style="padding: 20px 0">
-                    <Icon
-                      type="ios-cloud-upload"
-                      size="52"
-                      style="color: #3399ff"
-                    ></Icon>
-                    <p>Click or drag files here to upload</p>
-                  </div>
-                </Upload>
               </Col>
             </Row>
           </Form>
-        </Modal>
-        <Modal v-model="modal_create2" title="批量创建会议室" width="500">
-          <Button type="primary" size="large" @click="downloadXlxs"
-            >下载模板</Button
-          >
-          <br />
-          <br />
-          <Card style="width:450px">
-            <p slot="title">
-              <Icon type="ios-film-outline"></Icon>
-              上传excel表格
-            </p>
-            <Upload
-              multiple
-              type="drag"
-              :headers="uploadHeaders"
-              :format="['xlsx', 'xls']"
-              :on-format-error="handleFormatError2"
-              :on-success="uploadSuccess2"
-              :on-error="uploadError2"
-              action="http://10.10.10.81/api/manager/confCreationByExcel"
-            >
-              <div style="padding: 20px 0">
-                <Icon
-                  type="ios-cloud-upload"
-                  size="52"
-                  style="color: #3399ff"
-                ></Icon>
-                <p>Click or drag files here to upload</p>
-              </div>
-            </Upload>
-          </Card>
-          <div slot="footer">
-            <Button type="primary" size="large" @click="modal_create2 = false"
-              >确定</Button
-            >
-          </div>
         </Modal>
       </div>
     </Row>
     <Row>
       <Table
         size="large"
-        no-data-text="您当前没有可供管理的会议室"
+        no-data-text="您当前没有可供管理的课程"
         stripe
         border
         :loading="loading2"
@@ -300,232 +113,59 @@
           <Button type="error" size="large" long @click="del">删除</Button>
         </div>
       </Modal>
-      <Modal v-model="modal_info" title="会议室详情" width="1500">
+      <Modal v-model="modal_info" title="课程详情" width="1500">
         <Form :model="updatedconference_info" :label-width="100">
           <Row>
-            <Col span="6">
-              <FormItem label="房间号">
+            <Col span="8">
+              <FormItem label="课程号">
                 <Input
-                  v-model="updatedconference_info.name"
-                  disabled
-                  placeholder="例:D602(必填)"
+                    v-model="updatedconference_info.id"
+                    placeholder="例:1(必填)"
                 ></Input>
               </FormItem>
-              <FormItem label="所属大楼">
+              <FormItem label="课程名">
                 <Input
-                  v-model="updatedconference_info.building"
-                  disabled
-                  placeholder="例:D楼(必填)"
+                    v-model="updatedconference_info.name"
+                    placeholder="例:数据库原理(1)(必填)"
                 ></Input>
               </FormItem>
-              <FormItem label="联系电话">
-                <Input
-                  v-model="updatedconference_info.phone"
-                  :disabled="disable_imple"
-                  placeholder="例:13xxxxxxxxx(必填)"
-                ></Input>
-              </FormItem>
-              <FormItem label="取钥匙地点">
-                <Input
-                  v-model="updatedconference_info.addressKey"
-                  :disabled="disable_imple"
-                  placeholder="(必填)"
-                ></Input>
-              </FormItem>
-              <FormItem label="会议室面积">
+              <FormItem label="教师号">
                 <InputNumber
-                  v-model="updatedconference_info.areasize"
-                  :min="1"
-                  :disabled="disable_imple"
+                    v-model="updatedconference_info.teacherId"
+                    :min="1"
+                    placeholder="例:1(必填)"
                 ></InputNumber>
               </FormItem>
-              <FormItem label="座位数">
+              <FormItem label="教师名">
+                <Input
+                    v-model="updatedconference_info.teacherName"
+                    placeholder="(必填)"
+                ></Input>
+              </FormItem>
+              <FormItem label="学分">
                 <InputNumber
-                  v-model="updatedconference_info.seatnumber"
-                  :min="1"
-                  :disabled="disable_imple"
+                    v-model="updatedconference_info.credit"
+                    :min="1"
                 ></InputNumber>
               </FormItem>
-              <FormItem label="屏幕尺寸">
+              <FormItem label="上课地点">
                 <Input
-                  v-model="updatedconference_info.screensize"
-                  :disabled="disable_imple"
-                  placeholder="若没有则不填"
+                    v-model="updatedconference_info.address"
+                    placeholder="例A315(必填)"
                 ></Input>
               </FormItem>
-              <FormItem label="维保成本">
+              <FormItem label="上课时间">
+                <Input
+                    v-model="updatedconference_info.courseTime"
+                    placeholder="例:二:2-4;五:7-8"
+                ></Input>
+              </FormItem>
+              <FormItem label="选课容量">
                 <InputNumber
-                  v-model="updatedconference_info.maintaincost"
-                  :min="1"
-                  :disabled="disable_imple"
+                    v-model="updatedconference_info.capacity"
+                    :min = "1"
                 ></InputNumber>
               </FormItem>
-            </Col>
-            <Col span="6">
-              <FormItem label="对外开放">
-                <RadioGroup v-model="updatedconference_info.isAble">
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>是</span>
-                  </Radio>
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>否</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="对学生开放">
-                <RadioGroup v-model="updatedconference_info.studentAble">
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>是</span>
-                  </Radio>
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>否</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="对老师开放">
-                <RadioGroup v-model="updatedconference_info.teacherAble">
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>是</span>
-                  </Radio>
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>否</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="座椅摆放">
-                <RadioGroup v-model="updatedconference_info.seatsize">
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>圆桌式</span>
-                  </Radio>
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>剧院式</span>
-                  </Radio>
-                  <Radio :label="2" :disabled="disable_imple">
-                    <span>U形</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="房间用途">
-                <RadioGroup v-model="updatedconference_info.roomfunction">
-                  <Radio label="会议" :disabled="disable_imple">
-                    <span>会议</span>
-                  </Radio>
-                  <Radio label="培训" :disabled="disable_imple">
-                    <span>培训</span>
-                  </Radio>
-                  <Radio label="兼有" :disabled="disable_imple">
-                    <span>兼有</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="多功能">
-                <RadioGroup v-model="updatedconference_info.ismultifunc">
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>是</span>
-                  </Radio>
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>否</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="有话筒">
-                <RadioGroup v-model="updatedconference_info.hasspeaker">
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>是</span>
-                  </Radio>
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>否</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="有茶水">
-                <RadioGroup v-model="updatedconference_info.haswater">
-                  <Radio :label="1" :disabled="disable_imple">
-                    <span>是</span>
-                  </Radio>
-                  <Radio :label="0" :disabled="disable_imple">
-                    <span>否</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-            </Col>
-            <Col span="6">
-              <FormItem label="麦克风情况">
-                <Input
-                  v-model="updatedconference_info.microphonecondition"
-                  :disabled="disable_imple"
-                  placeholder="选填"
-                ></Input>
-              </FormItem>
-              <FormItem label="备注">
-                <Input
-                  v-model="updatedconference_info.otherdevicecondition"
-                  :disabled="disable_imple"
-                  placeholder="选填"
-                ></Input>
-              </FormItem>
-              <div>
-                <p style="text-align: center; margin-bottom: 10px">
-                  最早可提前预约天数：
-                </p>
-                <FormItem label="学生">
-                  <InputNumber
-                    v-model="updatedconference_info.studentDays"
-                    :min="1"
-                    :disabled="disable_imple"
-                  ></InputNumber>
-                </FormItem>
-                <FormItem label="同部门教师">
-                  <InputNumber
-                    v-model="updatedconference_info.sameTeacherDays"
-                    :min="1"
-                    :disabled="disable_imple"
-                  ></InputNumber>
-                </FormItem>
-                <FormItem label="其他部门教师">
-                  <InputNumber
-                    v-model="updatedconference_info.diffTeacherDays"
-                    :min="1"
-                    :disabled="disable_imple"
-                  ></InputNumber>
-                </FormItem>
-              </div>
-            </Col>
-            <Col span="6">
-              <div>
-                <p style="text-align: center">
-                  <span>会议室图片：</span> <span v-if="!picture_exit">无</span
-                  ><br />
-                </p>
-                <img
-                  :src="picture_url"
-                  style="margin-left: 30px; max-width: 300px"
-                  v-if="picture_exit"
-                  max-width="280"
-                />
-              </div>
-              <br />
-              <div v-if="!disable_imple">上传会议室照片(可不传)</div>
-              <Upload
-                multiple
-                v-if="!disable_imple"
-                type="drag"
-                :headers="uploadHeaders"
-                :format="['jpg', 'jpeg', 'png']"
-                :on-format-error="handleFormatError"
-                :on-success="uploadSuccess3"
-                :on-error="uploadError"
-                action="http://10.10.10.81/api/file/upload"
-              >
-                <div style="padding: 20px 0">
-                  <Icon
-                    type="ios-cloud-upload"
-                    size="52"
-                    style="color: #3399ff"
-                  ></Icon>
-                  <p>Click or drag files here to upload</p>
-                </div>
-              </Upload>
             </Col>
           </Row>
         </Form>
@@ -565,90 +205,37 @@ export default {
       loading2: false,
       loading_change: false,
       loading_upload: false,
-      modal_create: false, //直接创建会议室的对话框
-      modal_create2: false,
+      modal_create: false,
       modal_delete: false,
       modal_info: false,
       disable_imple: true,
-      picture_url: "",
-      picture_exit: false,
       conference_info: {
-        name: "", //会议室房间号
-        building: "", //所属大楼
-        phone: "", //会议室联系电话
-        addressKey: "", //取钥匙地点
-        studentAble: 0, //是否对学生开放，1为开放，以下同
-        teacherAble: 0, //是否对老师开放
-        isAble: 0, //是否开放
-        areasize: 1, //会议室面积 单位为立方米
-        seatnumber: 1, //座位数
-        seatsize: 0, //座位摆放方式
-        screensize: "", //投影仪屏幕大小
-        maintaincost: 1, //维保成本
-        roomfunction: "会议", //房间用途
-        ismultifunc: 0, //多功能会议室
-        hasspeaker: 0, //有话筒
-        haswater: 0, //有茶水
-        microphonecondition: "",
-        otherdevicecondition: "",
-        campus: "",
-        studentDays: 1,
-        sameTeacherDays: 1,
-        diffTeacherDays: 1
+        id: 0,
+        name: "",
+        teacherId: 0,
+        teacherName: "",
+        credit: 0,
+        address: "",
+        courseTime: "",
+        capacity: 0,
+        electionNum: 0
       },
       updatedconference_info: {
-        id: "",
-        name: "", //会议室房间号
-        building: "", //所属大楼
-        phone: "", //会议室联系电话
-        addressKey: "", //取钥匙地点
-        studentAble: 0, //是否对学生开放，1为开放，以下同
-        teacherAble: 0, //是否对老师开放
-        isAble: 0, //是否开放
-        areasize: 1, //会议室面积 单位为立方米
-        seatnumber: 1, //座位数
-        seatsize: 0, //座位摆放方式
-        screensize: "", //投影仪屏幕大小
-        maintaincost: 1, //维保成本
-        roomfunction: "", //房间用途
-        ismultifunc: 0, //多功能会议室
-        hasspeaker: 0, //有话筒
-        haswater: 0, //有茶水
-        microphonecondition: "",
-        otherdevicecondition: "",
-        studentDays: 1,
-        sameTeacherDays: 1,
-        diffTeacherDays: 1
+        id: 0,
+        name: "",
+        teacherId: 0,
+        teacherName: "",
+        credit: 0,
+        address: "",
+        courseTime: "",
+        capacity: 0,
+        electionNum: 0
       },
-      uploadHeaders: {
-        Authorization: localStorage.getItem("token")
-      },
-      pictureAddress: "",
-      xlsxAddress: "",
       deleteNumber: 0,
       columns: [
         {
-          title: "所属大楼",
-          key: "building",
-          align: "center",
-          tooltip: true
-        },
-        {
-          title: "会议室房间号",
-          key: "name",
-          align: "center",
-          tooltip: true
-        },
-        {
-          title: "座位数",
-          key: "seatnumber",
-          align: "center",
-          tooltip: true,
-          sortable: true
-        },
-        {
-          title: "是否开放",
-          key: "isAble",
+          title: "课程号",
+          key: "id",
           align: "center",
           tooltip: true
         },
@@ -673,7 +260,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.getConference_info(params.index);
+                      this.getCourse_info(params.index);
                     }
                   }
                 },
@@ -693,7 +280,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.deleteConference(params.index);
+                      this.deleteCourse(params.index);
                     }
                   }
                 },
@@ -720,7 +307,7 @@ export default {
       this.numberOfArr = 0;
       this.data = [];
       axios({
-        url: "api/manager/list",
+        url: "api/teacher/list",
         method: "get"
       })
         .then(res => {
@@ -743,7 +330,7 @@ export default {
           this.loading2 = false;
         });
     },
-    createConference() {
+    createCourse() {
       this.loading = true;
       if (
         this.conference_info.name &&
@@ -810,22 +397,10 @@ export default {
       this.$Message.success("创建会议室成功！");
       this.init("刷新成功");
     },
-    uploadError() {
-      this.$Message.error("上传失败！");
-    },
-    uploadError2() {
-      this.$Message.error("上传失败，请检查文件内容是否符合格式");
-    },
-    handleFormatError(file) {
-      this.$Message.error("请确定您上传的文件为图片!");
-    },
-    handleFormatError2(file) {
-      this.$Message.error("请确定您上传的文件为xlsx/xls文件!");
-    },
     refresh() {
       this.init("刷新成功!");
     },
-    deleteConference(index) {
+    deleteCourse(index) {
       this.modal_delete = true;
       this.deleteNumber = index;
       this.$nextTick(() => {
@@ -857,7 +432,7 @@ export default {
           this.modal_delete = false;
         });
     },
-    getConference_info(index) {
+    getCourse_info(index) {
       this.modal_info = true;
       this.picture_url = "";
       this.picture_exit = false;
