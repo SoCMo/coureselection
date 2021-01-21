@@ -79,7 +79,7 @@
 </template>
 <script>
 export default {
-  name: "student",
+  name: "teacher",
   data() {
     return {
       contentHeight: 450,
@@ -127,14 +127,15 @@ export default {
         this.$router.push("/login");
         localStorage.clear();
       } else {
+        if (this.identityString.indexOf("管理员") !== -1) {
+          this.identity.admin = true;
+          this.identity.show = true;
+        }
         if (this.identityString.indexOf("学生") !== -1) {
           this.identity.student = true;
         }
         if (this.identityString.indexOf("教师") !== -1) {
           this.identity.teacher = true;
-        }
-        if (this.identityString.indexOf("管理员") !== -1) {
-          this.identity.admin = true;
         }
       }
     },

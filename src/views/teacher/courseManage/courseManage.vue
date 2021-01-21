@@ -5,9 +5,8 @@
         <Button type="success" class="refresh_button" @click="refresh"
           >刷新</Button
         >
-        <Button type="primary" @click="createCourse()">
+        <Button type="primary" @click="modal_create = !modal_create">
           创建课程
-          <Icon type="ios-arrow-down"></Icon>
         </Button>
         <Modal
           v-model="modal_create"
@@ -17,60 +16,40 @@
           ok-text="提交"
           @on-ok="createCourse"
         >
-          <Form :model="conference_info" :label-width="100">
-            <Row>
-              <Col span="8">
-                <FormItem label="课程号">
-                  <Input
-                    v-model="conference_info.id"
-                    placeholder="例:1(必填)"
-                  ></Input>
-                </FormItem>
-                <FormItem label="课程名">
-                  <Input
-                    v-model="conference_info.name"
-                    placeholder="例:数据库原理(1)(必填)"
-                  ></Input>
-                </FormItem>
-                <FormItem label="教师号">
-                  <InputNumber
-                    v-model="conference_info.teacherId"
-                    :min="1"
-                    placeholder="例:1(必填)"
-                  ></InputNumber>
-                </FormItem>
-                <FormItem label="教师名">
-                  <Input
-                    v-model="conference_info.teacherName"
-                    placeholder="(必填)"
-                  ></Input>
-                </FormItem>
-                <FormItem label="学分">
-                  <InputNumber
-                    v-model="conference_info.credit"
-                    :min="1"
-                  ></InputNumber>
-                </FormItem>
-                <FormItem label="上课地点">
-                  <Input
-                    v-model="conference_info.address"
-                    placeholder="例A315(必填)"
-                  ></Input>
-                </FormItem>
-                <FormItem label="上课时间">
-                  <Input
-                    v-model="conference_info.seatnumber"
-                    placeholder="例:二:2-4;五:7-8"
-                  ></Input>
-                </FormItem>
-                <FormItem label="选课容量">
-                  <InputNumber
-                    v-model="conference_info.capacity"
-                    :min = "1"
-                  ></InputNumber>
-                </FormItem>
-              </Col>
-            </Row>
+          <Form :label-width="100" :model="course_info">
+            <FormItem label="课程名">
+              <label>
+                <Input
+                  v-model="course_info.name"
+                  placeholder="例:数据库原理(1)(必填)"
+                />
+              </label>
+            </FormItem>
+            <FormItem label="学分">
+              <InputNumber v-model="course_info.credit" :min="1"></InputNumber>
+            </FormItem>
+            <FormItem label="上课地点">
+              <label>
+                <Input
+                  v-model="course_info.address"
+                  placeholder="例A315(必填)"
+                />
+              </label>
+            </FormItem>
+            <FormItem label="上课时间">
+              <label>
+                <Input
+                  v-model="course_info.seatnumber"
+                  placeholder="例:二:2-4;五:7-8(请按格式填写)"
+                />
+              </label>
+            </FormItem>
+            <FormItem label="选课容量">
+              <InputNumber
+                v-model="course_info.capacity"
+                :min="1"
+              ></InputNumber>
+            </FormItem>
           </Form>
         </Modal>
       </div>
@@ -96,16 +75,20 @@
         show-elevator
       />
       <Modal v-model="modal_delete" width="550">
-        <p slot="header" style="color:#f60;text-align:center">
+        <p slot="header" style="color:#ff6600;text-align:center">
           <Icon type="ios-information-circle"></Icon>
           <span>删除确认</span>
         </p>
         <div style="text-align:center;font-size: 16px;">
-          <img src="../../../assets/img/error.png" width="100" />
+          <img
+            alt="图片读取失败"
+            src="../../../assets/img/error.png"
+            width="100"
+          />
           <br /><br />
           <p>
-            在进行此操作后，会议室&nbsp<span id="conference-name"></span
-            >&nbsp将会被删除
+            在进行此操作后，课程&nbsp;<span id="conference-name"></span
+          >&nbsp;将会被删除
           </p>
           <p>您确定要删除么</p>
         </div>
@@ -114,64 +97,68 @@
         </div>
       </Modal>
       <Modal v-model="modal_info" title="课程详情" width="1500">
-        <Form :model="updatedconference_info" :label-width="100">
-          <Row>
-            <Col span="8">
-              <FormItem label="课程号">
-                <Input
-                    v-model="updatedconference_info.id"
-                    placeholder="例:1(必填)"
-                ></Input>
-              </FormItem>
-              <FormItem label="课程名">
-                <Input
-                    v-model="updatedconference_info.name"
-                    placeholder="例:数据库原理(1)(必填)"
-                ></Input>
-              </FormItem>
-              <FormItem label="教师号">
-                <InputNumber
-                    v-model="updatedconference_info.teacherId"
-                    :min="1"
-                    placeholder="例:1(必填)"
-                ></InputNumber>
-              </FormItem>
-              <FormItem label="教师名">
-                <Input
-                    v-model="updatedconference_info.teacherName"
-                    placeholder="(必填)"
-                ></Input>
-              </FormItem>
-              <FormItem label="学分">
-                <InputNumber
-                    v-model="updatedconference_info.credit"
-                    :min="1"
-                ></InputNumber>
-              </FormItem>
-              <FormItem label="上课地点">
-                <Input
-                    v-model="updatedconference_info.address"
-                    placeholder="例A315(必填)"
-                ></Input>
-              </FormItem>
-              <FormItem label="上课时间">
-                <Input
-                    v-model="updatedconference_info.courseTime"
-                    placeholder="例:二:2-4;五:7-8"
-                ></Input>
-              </FormItem>
-              <FormItem label="选课容量">
-                <InputNumber
-                    v-model="updatedconference_info.capacity"
-                    :min = "1"
-                ></InputNumber>
-              </FormItem>
-            </Col>
-          </Row>
+        <Form :label-width="100" :model="updatedCourse_info">
+          <FormItem label="课程号">
+            <label>
+              <Input v-model="updatedCourse_info.id" placeholder="例:1(必填)" />
+            </label>
+          </FormItem>
+          <FormItem label="课程名">
+            <label>
+              <Input
+                v-model="updatedCourse_info.name"
+                placeholder="例:数据库原理(1)(必填)"
+              />
+            </label>
+          </FormItem>
+          <FormItem label="教师号">
+            <InputNumber
+              v-model="updatedCourse_info.teacherId"
+              :min="1"
+              placeholder="例:1(必填)"
+            ></InputNumber>
+          </FormItem>
+          <FormItem label="教师名">
+            <label>
+              <Input
+                v-model="updatedCourse_info.teacherName"
+                placeholder="(必填)"
+              />
+            </label>
+          </FormItem>
+          <FormItem label="学分">
+            <InputNumber
+              v-model="updatedCourse_info.credit"
+              :min="0"
+            ></InputNumber>
+          </FormItem>
+          <FormItem label="上课地点">
+            <label>
+              <Input
+                v-model="updatedCourse_info.address"
+                placeholder="例:A315(必填)"
+              />
+            </label>
+          </FormItem>
+          <FormItem label="上课时间">
+            <label>
+              <Input
+                v-model="updatedCourse_info.courseTime"
+                placeholder="例:二:2-4;五:7-8;"
+              />
+            </label>
+          </FormItem>
+          <FormItem label="选课容量">
+            <InputNumber
+              v-model="updatedCourse_info.capacity"
+              :min="1"
+            ></InputNumber>
+          </FormItem>
         </Form>
         <div slot="footer">
           <Button type="info" size="large" @click="cancel_model_info"
-            >取消</Button
+          >取消
+          </Button
           >
           <Button
             type="warning"
@@ -209,7 +196,7 @@ export default {
       modal_delete: false,
       modal_info: false,
       disable_imple: true,
-      conference_info: {
+      course_info: {
         id: 0,
         name: "",
         teacherId: 0,
@@ -220,7 +207,7 @@ export default {
         capacity: 0,
         electionNum: 0
       },
-      updatedconference_info: {
+      updatedCourse_info: {
         id: 0,
         name: "",
         teacherId: 0,
@@ -307,13 +294,12 @@ export default {
       this.numberOfArr = 0;
       this.data = [];
       axios({
-        url: "api/teacher/list",
+        url: "/api/teacher/list",
         method: "get"
       })
         .then(res => {
           if (res.data.code == 200) {
             res.data.data.forEach(item => {
-              item.isAble = item.isAble == 1 ? "是" : "否";
               this.data.push(item);
             });
             this.numberOfArr = this.data.length;
@@ -333,41 +319,21 @@ export default {
     createCourse() {
       this.loading = true;
       if (
-        this.conference_info.name &&
-        this.conference_info.building &&
-        this.conference_info.phone &&
-        this.conference_info.addressKey &&
-        this.conference_info.areasize &&
-        this.conference_info.seatnumber &&
-        this.conference_info.maintaincost
+        this.course_info.name &&
+        this.course_info.credit &&
+        this.course_info.address &&
+        this.course_info.courseTime &&
+        this.course_info.capacity
       ) {
         axios({
-          url: "api/manager/ConferenceCreation",
+          url: "/api/teacher/CourseCreation",
           method: "post",
           data: {
-            name: this.conference_info.name,
-            building: this.conference_info.building,
-            phone: this.conference_info.phone,
-            addressKey: this.conference_info.addressKey,
-            studentAble: this.conference_info.studentAble,
-            teacherAble: this.conference_info.teacherAble,
-            isAble: this.conference_info.isAble,
-            areasize: this.conference_info.areasize,
-            seatnumber: this.conference_info.seatnumber,
-            seatsize: this.conference_info.seatsize,
-            screensize: this.conference_info.screensize,
-            maintaincost: this.conference_info.maintaincost,
-            roomfunction: this.conference_info.roomfunction,
-            ismultifunc: this.conference_info.ismultifunc,
-            hasspeaker: this.conference_info.hasspeaker,
-            haswater: this.conference_info.haswater,
-            microphonecondition: this.conference_info.microphonecondition,
-            otherdevicecondition: this.conference_info.otherdevicecondition,
-            picture: this.pictureAddress,
-            campus: this.conference_info.campus,
-            studentdays: this.conference_info.studentDays,
-            sameteacherdays: this.conference_info.sameTeacherDays,
-            diffteacherdays: this.conference_info.diffTeacherDays
+            name: this.course_info.name,
+            credit: this.course_info.credit,
+            address: this.course_info.address,
+            courseTime: this.course_info.courseTime,
+            capacity: this.course_info.capacity
           }
         }).then(res => {
           if (res.data.code == 200) {
@@ -380,22 +346,12 @@ export default {
           }
         });
       } else {
-        this.$Message.error("请完整填写有关字段");
+        this.$Message.info("请完整填写有关字段");
         this.loading = false;
         this.$nextTick(() => {
           this.modal_create = true;
         });
       }
-    },
-    uploadSuccess(response) {
-      this.pictureAddress = response.data;
-    },
-    uploadSuccess3(response) {
-      this.updatedconference_info.picture = response.data;
-    },
-    uploadSuccess2(response) {
-      this.$Message.success("创建会议室成功！");
-      this.init("刷新成功");
     },
     refresh() {
       this.init("刷新成功!");
@@ -412,9 +368,7 @@ export default {
     del() {
       axios({
         url:
-          apiRoot +
-          "/manager/conferenceDeletion?id=" +
-          this.data[this.deleteNumber].id,
+          "/manager/conferenceDeletion?id=" + this.data[this.deleteNumber].id,
         method: "get"
       })
         .then(res => {
@@ -427,62 +381,52 @@ export default {
             this.modal_delete = false;
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.$Message.error("删除失败，请检查网络连接!");
           this.modal_delete = false;
         });
     },
     getCourse_info(index) {
       this.modal_info = true;
-      this.picture_url = "";
-      this.picture_exit = false;
       axios({
-        url: apiRoot + "/user/conferenceInfo?id=" + this.data[index].id,
+        url: "/user/conferenceInfo?id=" + this.data[index].id,
         method: "get"
       })
         .then(res => {
           if (res.data.code == 200) {
-            this.updatedconference_info.addressKey = res.data.data.addressKey;
-            this.updatedconference_info.areasize = res.data.data.areasize;
-            this.updatedconference_info.building = res.data.data.building;
-            this.updatedconference_info.hasspeaker = res.data.data.hasspeaker;
-            this.updatedconference_info.haswater = res.data.data.haswater;
-            this.updatedconference_info.id = res.data.data.id;
-            this.updatedconference_info.isAble = res.data.data.isAble;
-            this.updatedconference_info.ismultifunc = res.data.data.ismultifunc;
-            this.updatedconference_info.maintaincost =
-              res.data.data.maintaincost;
-            this.updatedconference_info.microphonecondition =
+            this.updatedCourse_info.addressKey = res.data.data.addressKey;
+            this.updatedCourse_info.areasize = res.data.data.areasize;
+            this.updatedCourse_info.building = res.data.data.building;
+            this.updatedCourse_info.hasspeaker = res.data.data.hasspeaker;
+            this.updatedCourse_info.haswater = res.data.data.haswater;
+            this.updatedCourse_info.id = res.data.data.id;
+            this.updatedCourse_info.isAble = res.data.data.isAble;
+            this.updatedCourse_info.ismultifunc = res.data.data.ismultifunc;
+            this.updatedCourse_info.maintaincost = res.data.data.maintaincost;
+            this.updatedCourse_info.microphonecondition =
               res.data.data.microphonecondition;
-            this.updatedconference_info.name = res.data.data.name;
-            this.updatedconference_info.otherdevicecondition =
+            this.updatedCourse_info.name = res.data.data.name;
+            this.updatedCourse_info.otherdevicecondition =
               res.data.data.otherdevicecondition;
-            this.updatedconference_info.phone = res.data.data.phone;
-            this.updatedconference_info.picture = res.data.data.picture;
-            this.updatedconference_info.roomfunction =
-              res.data.data.roomfunction;
-            this.updatedconference_info.screensize = res.data.data.screensize;
-            this.updatedconference_info.seatnumber = res.data.data.seatnumber;
-            this.updatedconference_info.seatsize = res.data.data.seatsize;
-            this.updatedconference_info.studentAble = res.data.data.studentAble;
-            this.updatedconference_info.teacherAble = res.data.data.teacherAble;
-            this.updatedconference_info.studentDays = res.data.data.studentdays;
-            this.updatedconference_info.sameTeacherDays =
+            this.updatedCourse_info.phone = res.data.data.phone;
+            this.updatedCourse_info.picture = res.data.data.picture;
+            this.updatedCourse_info.roomfunction = res.data.data.roomfunction;
+            this.updatedCourse_info.screensize = res.data.data.screensize;
+            this.updatedCourse_info.seatnumber = res.data.data.seatnumber;
+            this.updatedCourse_info.seatsize = res.data.data.seatsize;
+            this.updatedCourse_info.studentAble = res.data.data.studentAble;
+            this.updatedCourse_info.teacherAble = res.data.data.teacherAble;
+            this.updatedCourse_info.studentDays = res.data.data.studentdays;
+            this.updatedCourse_info.sameTeacherDays =
               res.data.data.sameteacherdays;
-            this.updatedconference_info.diffTeacherDays =
+            this.updatedCourse_info.diffTeacherDays =
               res.data.data.diffteacherdays;
-
-            if (this.updatedconference_info.picture != "") {
-              this.picture_url =
-                "http://10.10.10.81" + this.updatedconference_info.picture;
-              this.picture_exit = true;
-            }
           } else {
             this.$Message.error(res.data.Message);
             this.modal_info = false;
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.$Message.error("加载失败，请检查网络连接!");
           this.modal_info = false;
         });
@@ -494,43 +438,41 @@ export default {
     save() {
       this.loading_change = true;
       if (
-        this.updatedconference_info.name &&
-        this.updatedconference_info.building &&
-        this.updatedconference_info.phone &&
-        this.updatedconference_info.addressKey &&
-        this.updatedconference_info.areasize &&
-        this.updatedconference_info.seatnumber &&
-        this.updatedconference_info.maintaincost
+        this.updatedCourse_info.name &&
+        this.updatedCourse_info.building &&
+        this.updatedCourse_info.phone &&
+        this.updatedCourse_info.addressKey &&
+        this.updatedCourse_info.areasize &&
+        this.updatedCourse_info.seatnumber &&
+        this.updatedCourse_info.maintaincost
       ) {
         axios({
-          url: apiRoot + "/manager/update",
+          url: "/manager/update",
           method: "post",
           data: {
-            id: this.updatedconference_info.id,
-            name: this.updatedconference_info.name,
-            building: this.updatedconference_info.building,
-            phone: this.updatedconference_info.phone,
-            addressKey: this.updatedconference_info.addressKey,
-            studentAble: this.updatedconference_info.studentAble,
-            teacherAble: this.updatedconference_info.teacherAble,
-            isAble: this.updatedconference_info.isAble,
-            areasize: this.updatedconference_info.areasize,
-            seatnumber: this.updatedconference_info.seatnumber,
-            seatsize: this.updatedconference_info.seatsize,
-            screensize: this.updatedconference_info.screensize,
-            maintaincost: this.updatedconference_info.maintaincost,
-            roomfunction: this.updatedconference_info.roomfunction,
-            ismultifunc: this.updatedconference_info.ismultifunc,
-            hasspeaker: this.updatedconference_info.hasspeaker,
-            haswater: this.updatedconference_info.haswater,
-            microphonecondition: this.updatedconference_info
-              .microphonecondition,
-            otherdevicecondition: this.updatedconference_info
-              .otherdevicecondition,
-            picture: this.updatedconference_info.picture,
-            studentdays: this.updatedconference_info.studentDays,
-            sameteacherdays: this.updatedconference_info.sameTeacherDays,
-            diffteacherdays: this.updatedconference_info.diffTeacherDays
+            id: this.updatedCourse_info.id,
+            name: this.updatedCourse_info.name,
+            building: this.updatedCourse_info.building,
+            phone: this.updatedCourse_info.phone,
+            addressKey: this.updatedCourse_info.addressKey,
+            studentAble: this.updatedCourse_info.studentAble,
+            teacherAble: this.updatedCourse_info.teacherAble,
+            isAble: this.updatedCourse_info.isAble,
+            areasize: this.updatedCourse_info.areasize,
+            seatnumber: this.updatedCourse_info.seatnumber,
+            seatsize: this.updatedCourse_info.seatsize,
+            screensize: this.updatedCourse_info.screensize,
+            maintaincost: this.updatedCourse_info.maintaincost,
+            roomfunction: this.updatedCourse_info.roomfunction,
+            ismultifunc: this.updatedCourse_info.ismultifunc,
+            hasspeaker: this.updatedCourse_info.hasspeaker,
+            haswater: this.updatedCourse_info.haswater,
+            microphonecondition: this.updatedCourse_info.microphonecondition,
+            otherdevicecondition: this.updatedCourse_info.otherdevicecondition,
+            picture: this.updatedCourse_info.picture,
+            studentdays: this.updatedCourse_info.studentDays,
+            sameteacherdays: this.updatedCourse_info.sameTeacherDays,
+            diffteacherdays: this.updatedCourse_info.diffTeacherDays
           }
         }).then(res => {
           if (res.data.code == 200) {
@@ -558,28 +500,6 @@ export default {
         this.loading_change = false;
         this.modal_info = false;
       }
-    },
-    downloadXlxs() {
-      var filename = "会议室创建模板.xlsx";
-      axios({
-        url:
-          apiRoot +
-          "/file/download?fileAddress=/home/ConferenceRoomBackend/files/3ffd6ddd-890d-45c9-8e0e-85cbfe43d185---会议室创建模板.xlsx",
-        method: "get",
-        responseType: "blob"
-      })
-        .then(res => {
-          if (res.status == 200) {
-            // console.log(res.data)
-            download(res.data, filename, "text/plain");
-            this.$Message.success("下载成功！");
-          } else {
-            this.$Message.error("下载失败！");
-          }
-        })
-        .catch(err => {
-          this.$Message.error("下载失败，请检查网络连接！");
-        });
     },
     changepage(index) {
       let _start = (index - 1) * 10;
