@@ -43,7 +43,7 @@ const routes = [
     redirect: { name: "teacher_myInfo" },
     children: [
       {
-        path: "myInfo",
+        path: "teacher_myInfo",
         component: myInfo,
         name: "teacher_myInfo"
       },

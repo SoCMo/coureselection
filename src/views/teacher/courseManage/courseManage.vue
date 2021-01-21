@@ -39,7 +39,7 @@
             <FormItem label="上课时间">
               <label>
                 <Input
-                  v-model="course_info.seatnumber"
+                  v-model="course_info.courseTime"
                   placeholder="例:二:2-4;五:7-8(请按格式填写)"
                 />
               </label>
@@ -87,8 +87,8 @@
           />
           <br /><br />
           <p>
-            在进行此操作后，课程&nbsp;<span id="conference-name"></span
-          >&nbsp;将会被删除
+            在进行此操作后，课程&nbsp;<span id="course-name"></span
+            >&nbsp;将会被删除
           </p>
           <p>您确定要删除么</p>
         </div>
@@ -157,9 +157,8 @@
         </Form>
         <div slot="footer">
           <Button type="info" size="large" @click="cancel_model_info"
-          >取消
-          </Button
-          >
+            >取消
+          </Button>
           <Button
             type="warning"
             size="large"
@@ -227,6 +226,44 @@ export default {
           tooltip: true
         },
         {
+          title: "课程名",
+          key: "name",
+          align: "center",
+          width: "200",
+          tooltip: true
+        },
+        {
+          title: "学分",
+          key: "credit",
+          align: "center",
+          tooltip: true
+        },
+        {
+          title: "上课时间",
+          key: "courseTime",
+          align: "center",
+          width: "200",
+          tooltip: true
+        },
+        {
+          title: "上课地点",
+          key: "address",
+          align: "center",
+          tooltip: true
+        },
+        {
+          title: "容量",
+          key: "capacity",
+          align: "center",
+          tooltip: true
+        },
+        {
+          title: "选课人数",
+          key: "electionNum",
+          align: "center",
+          tooltip: true
+        },
+        {
           title: "操作",
           key: "operation",
           align: "center",
@@ -251,7 +288,7 @@ export default {
                     }
                   }
                 },
-                "详情"
+                "管理"
               ),
               h(
                 "Button",
@@ -326,7 +363,7 @@ export default {
         this.course_info.capacity
       ) {
         axios({
-          url: "/api/teacher/CourseCreation",
+          url: "/api/teacher/creation",
           method: "post",
           data: {
             name: this.course_info.name,
@@ -360,15 +397,14 @@ export default {
       this.modal_delete = true;
       this.deleteNumber = index;
       this.$nextTick(() => {
-        document.querySelector("#conference-name").innerHTML = this.data[
+        document.querySelector("#course-name").innerHTML = this.data[
           this.deleteNumber
         ].name;
       });
     },
     del() {
       axios({
-        url:
-          "/manager/conferenceDeletion?id=" + this.data[this.deleteNumber].id,
+        url: "/api/teacher/deletion?id=" + this.data[this.deleteNumber].id,
         method: "get"
       })
         .then(res => {
