@@ -100,7 +100,7 @@
         <Form :label-width="100" :model="updatedCourse_info">
           <FormItem label="课程号">
             <label>
-              <Input v-model="updatedCourse_info.id" placeholder="例:1(必填)" />
+              <Input disabled placeholder="例:1(必填)" v-model="updatedCourse_info.id" />
             </label>
           </FormItem>
           <FormItem label="课程名">
@@ -108,21 +108,25 @@
               <Input
                 v-model="updatedCourse_info.name"
                 placeholder="例:数据库原理(1)(必填)"
+                :disabled="disable_imple"
               />
             </label>
           </FormItem>
           <FormItem label="教师号">
-            <InputNumber
-              v-model="updatedCourse_info.teacherId"
-              :min="1"
-              placeholder="例:1(必填)"
-            ></InputNumber>
+            <label>
+              <Input
+                disabled
+                placeholder="例:1(必填)"
+                v-model="updatedCourse_info.teacherId"
+              />
+            </label>
           </FormItem>
           <FormItem label="教师名">
             <label>
               <Input
                 v-model="updatedCourse_info.teacherName"
                 placeholder="(必填)"
+                disabled
               />
             </label>
           </FormItem>
@@ -130,6 +134,7 @@
             <InputNumber
               v-model="updatedCourse_info.credit"
               :min="0"
+              :disabled="disable_imple"
             ></InputNumber>
           </FormItem>
           <FormItem label="上课地点">
@@ -137,6 +142,7 @@
               <Input
                 v-model="updatedCourse_info.address"
                 placeholder="例:A315(必填)"
+                :disabled="disable_imple"
               />
             </label>
           </FormItem>
@@ -145,6 +151,7 @@
               <Input
                 v-model="updatedCourse_info.courseTime"
                 placeholder="例:二:2-4;五:7-8;"
+                :disabled="disable_imple"
               />
             </label>
           </FormItem>
@@ -152,6 +159,7 @@
             <InputNumber
               v-model="updatedCourse_info.capacity"
               :min="1"
+              :disabled="disable_imple"
             ></InputNumber>
           </FormItem>
         </Form>
@@ -181,9 +189,9 @@
 </template>
 
 <script>
-import axios from "axios";
+  import axios from "axios";
 
-export default {
+  export default {
   name: "courseManage",
   data() {
     return {
@@ -330,6 +338,7 @@ export default {
       this.nowData = [];
       this.numberOfArr = 0;
       this.data = [];
+      this.electedStu = [];
       axios({
         url: "/api/teacher/list",
         method: "get"
@@ -425,38 +434,21 @@ export default {
     getCourse_info(index) {
       this.modal_info = true;
       axios({
-        url: "/user/conferenceInfo?id=" + this.data[index].id,
+        url: "/api/teacher/details?id=" + this.data[index].id,
         method: "get"
       })
         .then(res => {
           if (res.data.code == 200) {
-            this.updatedCourse_info.addressKey = res.data.data.addressKey;
-            this.updatedCourse_info.areasize = res.data.data.areasize;
-            this.updatedCourse_info.building = res.data.data.building;
-            this.updatedCourse_info.hasspeaker = res.data.data.hasspeaker;
-            this.updatedCourse_info.haswater = res.data.data.haswater;
             this.updatedCourse_info.id = res.data.data.id;
-            this.updatedCourse_info.isAble = res.data.data.isAble;
-            this.updatedCourse_info.ismultifunc = res.data.data.ismultifunc;
-            this.updatedCourse_info.maintaincost = res.data.data.maintaincost;
-            this.updatedCourse_info.microphonecondition =
-              res.data.data.microphonecondition;
             this.updatedCourse_info.name = res.data.data.name;
-            this.updatedCourse_info.otherdevicecondition =
-              res.data.data.otherdevicecondition;
-            this.updatedCourse_info.phone = res.data.data.phone;
-            this.updatedCourse_info.picture = res.data.data.picture;
-            this.updatedCourse_info.roomfunction = res.data.data.roomfunction;
-            this.updatedCourse_info.screensize = res.data.data.screensize;
-            this.updatedCourse_info.seatnumber = res.data.data.seatnumber;
-            this.updatedCourse_info.seatsize = res.data.data.seatsize;
-            this.updatedCourse_info.studentAble = res.data.data.studentAble;
-            this.updatedCourse_info.teacherAble = res.data.data.teacherAble;
-            this.updatedCourse_info.studentDays = res.data.data.studentdays;
-            this.updatedCourse_info.sameTeacherDays =
-              res.data.data.sameteacherdays;
-            this.updatedCourse_info.diffTeacherDays =
-              res.data.data.diffteacherdays;
+            this.updatedCourse_info.teacherId = res.data.data.teacherId;
+            this.updatedCourse_info.teacherName = res.data.data.teacherName;
+            this.updatedCourse_info.credit = res.data.data.credit;
+            this.updatedCourse_info.address = res.data.data.address;
+            this.updatedCourse_info.courseTime = res.data.data.courseTime;
+            this.updatedCourse_info.capacity = res.data.data.capacity;
+            this.updatedCourse_info.electionNum = res.data.data.electionNum;
+            this.electedStu = res.data.data.electedStu;
           } else {
             this.$Message.error(res.data.Message);
             this.modal_info = false;
