@@ -21,7 +21,7 @@ axios.interceptors.response.use(
     return res;
   },
   error => {
-    if (error.response.status == "403" || error.response.status == "401") {
+    if (error.response.status === 403 || error.response.status === 401) {
       localStorage.clear();
       Router.replace({ path: "/login" });
     } else {
@@ -34,7 +34,7 @@ axios.interceptors.response.use(
       if (last !== "/login") {
         localStorage.setItem("last", last);
       }
-      Router.push({ name: "/login" });
+      Router.push({ name: "login" });
     }
 
     setTimeout(() => {

@@ -6,7 +6,7 @@
           <img alt="图标读取失败" src="../../assets/img/font.jpg" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
-          <MenuItem name="election">
+          <MenuItem name="courseChoice">
             <Icon type="ios-create-outline"></Icon>
             <span>选课</span>
           </MenuItem>

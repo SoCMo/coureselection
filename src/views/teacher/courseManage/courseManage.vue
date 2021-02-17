@@ -93,67 +93,109 @@
           <p>您确定要删除么</p>
         </div>
         <div slot="footer">
-          <Button type="error" size="large" long @click="del">删除</Button>
+          <Button type="error" size="large" @click="del">删除</Button>
         </div>
       </Modal>
-      <Modal v-model="modal_info" title="课程详情" width="1500">
+      <Modal v-model="modal_info" title="课程详情" width="800">
         <Form :label-width="100" :model="updatedCourse_info">
-          <FormItem label="课程号">
-            <label>
-              <Input v-model="updatedCourse_info.id" placeholder="例:1(必填)" />
-            </label>
-          </FormItem>
-          <FormItem label="课程名">
-            <label>
-              <Input
-                v-model="updatedCourse_info.name"
-                placeholder="例:数据库原理(1)(必填)"
-              />
-            </label>
-          </FormItem>
-          <FormItem label="教师号">
-            <InputNumber
-              v-model="updatedCourse_info.teacherId"
-              :min="1"
-              placeholder="例:1(必填)"
-            ></InputNumber>
-          </FormItem>
-          <FormItem label="教师名">
-            <label>
-              <Input
-                v-model="updatedCourse_info.teacherName"
-                placeholder="(必填)"
-              />
-            </label>
-          </FormItem>
-          <FormItem label="学分">
-            <InputNumber
-              v-model="updatedCourse_info.credit"
-              :min="0"
-            ></InputNumber>
-          </FormItem>
-          <FormItem label="上课地点">
-            <label>
-              <Input
-                v-model="updatedCourse_info.address"
-                placeholder="例:A315(必填)"
-              />
-            </label>
-          </FormItem>
-          <FormItem label="上课时间">
-            <label>
-              <Input
-                v-model="updatedCourse_info.courseTime"
-                placeholder="例:二:2-4;五:7-8;"
-              />
-            </label>
-          </FormItem>
-          <FormItem label="选课容量">
-            <InputNumber
-              v-model="updatedCourse_info.capacity"
-              :min="1"
-            ></InputNumber>
-          </FormItem>
+          <Row>
+            <Col span="10">
+              <FormItem label="课程号">
+                <label>
+                  <Input v-model="updatedCourse_info.id" disabled />
+                </label>
+              </FormItem>
+              <FormItem label="课程名">
+                <label>
+                  <Input v-model="updatedCourse_info.name" disabled />
+                </label>
+              </FormItem>
+              <FormItem label="教师号">
+                <Input v-model="updatedCourse_info.teacherId" disabled />
+              </FormItem>
+              <FormItem label="教师名">
+                <label>
+                  <Input v-model="updatedCourse_info.teacherName" disabled />
+                </label>
+              </FormItem>
+              <FormItem label="学分">
+                <InputNumber
+                  v-model="updatedCourse_info.credit"
+                  :min="0"
+                  :disabled="disable_imple"
+                ></InputNumber>
+              </FormItem>
+              <FormItem label="上课地点">
+                <label>
+                  <Input
+                    v-model="updatedCourse_info.address"
+                    placeholder="例:A315(必填)"
+                    :disabled="disable_imple"
+                  />
+                </label>
+              </FormItem>
+              <FormItem label="选课容量">
+                <InputNumber
+                  v-model="updatedCourse_info.capacity"
+                  :min="1"
+                  :disabled="disable_imple"
+                ></InputNumber>
+              </FormItem>
+            </Col>
+            <Col span="14">
+              <FormItem label="上课时间:">
+                <Button type="success" @click="addTime" v-if="!disable_imple"
+                  >添加<Icon type="md-add"
+                /></Button>
+              </FormItem>
+              <div v-for="(item, i) in timeData" class="courseTime" :key="i">
+                周
+                <label>
+                  <Select
+                    v-model="item.weekday"
+                    style="width:50px"
+                    :disabled="disable_imple"
+                  >
+                    <Option
+                      v-for="num in weekTime"
+                      :value="num.value"
+                      :key="num.value"
+                      >{{ num.label }}</Option
+                    >
+                  </Select>
+                </label>
+                <label>
+                  第
+                  <Select
+                    v-model="item.beginTime"
+                    style="width:50px"
+                    :disabled="disable_imple"
+                  >
+                    <Option v-for="num in 13" :value="num" :key="num">{{
+                      num
+                    }}</Option>
+                  </Select>
+                  节
+                  <span>至</span>
+                  第
+                  <Select
+                    v-model="item.endTime"
+                    style="width:50px"
+                    :disabled="disable_imple"
+                  >
+                    <Option v-for="num in 13" :value="num" :key="num">{{
+                      num
+                    }}</Option>
+                  </Select>
+                  节
+                </label>
+                <label v-if="item.endTime < item.beginTime">
+                  <Icon type="ios-sad" />
+                  时间格式错误
+                </label>
+              </div>
+            </Col>
+          </Row>
         </Form>
         <div slot="footer">
           <Button type="info" size="large" @click="cancel_model_info"
@@ -195,6 +237,36 @@ export default {
       modal_delete: false,
       modal_info: false,
       disable_imple: true,
+      weekTime: [
+        {
+          value: "一",
+          label: "一"
+        },
+        {
+          value: "二",
+          label: "二"
+        },
+        {
+          value: "三",
+          label: "三"
+        },
+        {
+          value: "四",
+          label: "四"
+        },
+        {
+          value: "五",
+          label: "五"
+        },
+        {
+          value: "六",
+          label: "六"
+        },
+        {
+          value: "七",
+          label: "日"
+        }
+      ],
       course_info: {
         id: 0,
         name: "",
@@ -222,21 +294,20 @@ export default {
         {
           title: "课程号",
           key: "id",
-          align: "center",
-          tooltip: true
+          align: "center"
         },
         {
           title: "课程名",
           key: "name",
           align: "center",
-          width: "200",
+          width: "250",
           tooltip: true
         },
         {
           title: "学分",
           key: "credit",
           align: "center",
-          tooltip: true
+          width: "50"
         },
         {
           title: "上课时间",
@@ -254,20 +325,18 @@ export default {
         {
           title: "容量",
           key: "capacity",
-          align: "center",
-          tooltip: true
+          align: "center"
         },
         {
           title: "选课人数",
           key: "electionNum",
-          align: "center",
-          tooltip: true
+          align: "center"
         },
         {
           title: "操作",
           key: "operation",
           align: "center",
-          width: 250,
+          width: 300,
           render: (h, params) => {
             return h("div", [
               h(
@@ -297,6 +366,7 @@ export default {
                     type: "primary"
                   },
                   style: {
+                    marginRight: "5px",
                     height: "30px",
                     backgroundColor: "#FF7F50",
                     borderColor: "white",
@@ -309,12 +379,37 @@ export default {
                   }
                 },
                 "删除"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary"
+                  },
+                  style: {
+                    height: "30px",
+                    backgroundColor: "#FF8C00",
+                    borderColor: "white",
+                    fontSize: "15px"
+                  },
+                  on: {
+                    click: () => {
+                      console.info(params);
+                      this.$router.push({
+                        name: "gradeManage",
+                        query: { id: params.row.id }
+                      });
+                    }
+                  }
+                },
+                "学生成绩"
               )
             ]);
           }
         }
       ],
       data: [],
+      timeData: [],
       numberOfArr: 0,
       pageCurrent: 1,
       nowData: []
@@ -324,7 +419,7 @@ export default {
     this.init("初始化成功!");
   },
   methods: {
-    init(index) {
+    init(message) {
       this.loading2 = true;
       this.pageCurrent = 1;
       this.nowData = [];
@@ -340,7 +435,7 @@ export default {
               this.data.push(item);
             });
             this.numberOfArr = this.data.length;
-            this.$Message.success(index);
+            this.$Message.success(message);
             this.loading2 = false;
           } else {
             this.$Message.error(res.data.message);
@@ -378,7 +473,7 @@ export default {
             this.init("刷新成功");
             this.loading = false;
           } else {
-            this.$Message.error(res.data.Message);
+            this.$Message.error(res.data.message);
             this.loading = false;
           }
         });
@@ -413,7 +508,7 @@ export default {
             this.init("刷新成功!");
             this.modal_delete = false;
           } else {
-            this.$Message.error(res.data.Message);
+            this.$Message.error(res.data.message);
             this.modal_delete = false;
           }
         })
@@ -424,48 +519,18 @@ export default {
     },
     getCourse_info(index) {
       this.modal_info = true;
-      axios({
-        url: "/user/conferenceInfo?id=" + this.data[index].id,
-        method: "get"
-      })
-        .then(res => {
-          if (res.data.code == 200) {
-            this.updatedCourse_info.addressKey = res.data.data.addressKey;
-            this.updatedCourse_info.areasize = res.data.data.areasize;
-            this.updatedCourse_info.building = res.data.data.building;
-            this.updatedCourse_info.hasspeaker = res.data.data.hasspeaker;
-            this.updatedCourse_info.haswater = res.data.data.haswater;
-            this.updatedCourse_info.id = res.data.data.id;
-            this.updatedCourse_info.isAble = res.data.data.isAble;
-            this.updatedCourse_info.ismultifunc = res.data.data.ismultifunc;
-            this.updatedCourse_info.maintaincost = res.data.data.maintaincost;
-            this.updatedCourse_info.microphonecondition =
-              res.data.data.microphonecondition;
-            this.updatedCourse_info.name = res.data.data.name;
-            this.updatedCourse_info.otherdevicecondition =
-              res.data.data.otherdevicecondition;
-            this.updatedCourse_info.phone = res.data.data.phone;
-            this.updatedCourse_info.picture = res.data.data.picture;
-            this.updatedCourse_info.roomfunction = res.data.data.roomfunction;
-            this.updatedCourse_info.screensize = res.data.data.screensize;
-            this.updatedCourse_info.seatnumber = res.data.data.seatnumber;
-            this.updatedCourse_info.seatsize = res.data.data.seatsize;
-            this.updatedCourse_info.studentAble = res.data.data.studentAble;
-            this.updatedCourse_info.teacherAble = res.data.data.teacherAble;
-            this.updatedCourse_info.studentDays = res.data.data.studentdays;
-            this.updatedCourse_info.sameTeacherDays =
-              res.data.data.sameteacherdays;
-            this.updatedCourse_info.diffTeacherDays =
-              res.data.data.diffteacherdays;
-          } else {
-            this.$Message.error(res.data.Message);
-            this.modal_info = false;
-          }
-        })
-        .catch(() => {
-          this.$Message.error("加载失败，请检查网络连接!");
-          this.modal_info = false;
-        });
+      this.updatedCourse_info = JSON.parse(JSON.stringify(this.data[index]));
+      this.timeData = [];
+      let dayArray = this.updatedCourse_info.courseTime.split(";");
+      for (let day of dayArray) {
+        if (day === "" || day == null) continue;
+        let item = {};
+        item.weekday = day.charAt(1);
+        let onTheDay = day.split(":")[1];
+        item.beginTime = parseInt(onTheDay.split("-")[0]);
+        item.endTime = parseInt(onTheDay.split("-")[1]);
+        this.timeData.push(item);
+      }
     },
     cancel_model_info() {
       this.modal_info = false;
@@ -473,57 +538,34 @@ export default {
     },
     save() {
       this.loading_change = true;
+      this.saveTime();
       if (
-        this.updatedCourse_info.name &&
-        this.updatedCourse_info.building &&
-        this.updatedCourse_info.phone &&
-        this.updatedCourse_info.addressKey &&
-        this.updatedCourse_info.areasize &&
-        this.updatedCourse_info.seatnumber &&
-        this.updatedCourse_info.maintaincost
+        this.updatedCourse_info.id &&
+        this.updatedCourse_info.credit &&
+        this.updatedCourse_info.address &&
+        this.updatedCourse_info.courseTime &&
+        this.updatedCourse_info.capacity
       ) {
         axios({
-          url: "/manager/update",
+          url: "/api/teacher/update",
           method: "post",
           data: {
             id: this.updatedCourse_info.id,
-            name: this.updatedCourse_info.name,
-            building: this.updatedCourse_info.building,
-            phone: this.updatedCourse_info.phone,
-            addressKey: this.updatedCourse_info.addressKey,
-            studentAble: this.updatedCourse_info.studentAble,
-            teacherAble: this.updatedCourse_info.teacherAble,
-            isAble: this.updatedCourse_info.isAble,
-            areasize: this.updatedCourse_info.areasize,
-            seatnumber: this.updatedCourse_info.seatnumber,
-            seatsize: this.updatedCourse_info.seatsize,
-            screensize: this.updatedCourse_info.screensize,
-            maintaincost: this.updatedCourse_info.maintaincost,
-            roomfunction: this.updatedCourse_info.roomfunction,
-            ismultifunc: this.updatedCourse_info.ismultifunc,
-            hasspeaker: this.updatedCourse_info.hasspeaker,
-            haswater: this.updatedCourse_info.haswater,
-            microphonecondition: this.updatedCourse_info.microphonecondition,
-            otherdevicecondition: this.updatedCourse_info.otherdevicecondition,
-            picture: this.updatedCourse_info.picture,
-            studentdays: this.updatedCourse_info.studentDays,
-            sameteacherdays: this.updatedCourse_info.sameTeacherDays,
-            diffteacherdays: this.updatedCourse_info.diffTeacherDays
+            credit: this.updatedCourse_info.credit,
+            address: this.updatedCourse_info.address,
+            courseTime: this.updatedCourse_info.courseTime,
+            capacity: this.updatedCourse_info.capacity
           }
         }).then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("信息更新成功");
+          if (res.data.code === 200) {
             this.init("刷新成功");
-
+            this.$Message.success("信息更新成功");
             this.disable_imple = true;
             this.loading_change = false;
             this.modal_info = false;
           } else {
-            this.$Message.error(res.data.Message);
-
-            this.disable_imple = true;
+            this.$Message.error(res.data.message);
             this.loading_change = false;
-            this.modal_info = false;
           }
         });
       } else {
@@ -545,6 +587,28 @@ export default {
       this.nowData = this.data.slice(_start, _end);
       //储存当前页
       this.pageCurrent = index;
+    },
+    addTime() {
+      let item = {
+        weekday: "一",
+        beginTime: 1,
+        endTime: 1
+      };
+      this.timeData.push(item);
+    },
+    saveTime() {
+      this.updatedCourse_info.courseTime = "";
+      for (let day of this.timeData) {
+        this.updatedCourse_info.courseTime = this.updatedCourse_info.courseTime.concat(
+          "周",
+          day.weekday,
+          ":",
+          day.beginTime,
+          "-",
+          day.endTime,
+          ";"
+        );
+      }
     }
   }
 };

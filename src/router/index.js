@@ -7,6 +7,8 @@ import student from "@/group/student/student";
 import myInfo from "@/views/student/myInfo/myInfo";
 import teacher from "@/group/teacher/teacher";
 import courseManage from "@/views/teacher/courseManage/courseManage";
+import courseChoice from "@/views/student/courseChoice/courseChoice";
+import gradeManage from "@/views/teacher/gradeManage/gradeManage";
 
 Vue.use(VueRouter);
 
@@ -34,6 +36,11 @@ const routes = [
         path: "myInfo",
         component: myInfo,
         name: "myInfo"
+      },
+      {
+        path: "courseChoice",
+        component: courseChoice,
+        name: "courseChoice"
       }
     ]
   },
@@ -42,6 +49,11 @@ const routes = [
     component: teacher,
     redirect: { name: "teacher_myInfo" },
     children: [
+      {
+        path: "gradeManage",
+        component: gradeManage,
+        name: "gradeManage"
+      },
       {
         path: "teacher_myInfo",
         component: myInfo,

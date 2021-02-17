@@ -6,8 +6,12 @@
           <img alt="图标读取失败" src="../../assets/img/font.jpg" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
+          <!--          <MenuItem name="gradeManage">-->
+          <!--            <Icon type="ios-create-outline" />-->
+          <!--            <span>成绩管理</span>-->
+          <!--          </MenuItem>-->
           <MenuItem name="courseManage">
-            <Icon type="ios-create-outline"></Icon>
+            <Icon type="ios-albums-outline" />
             <span>课程管理</span>
           </MenuItem>
           <MenuItem name="teacher_myInfo">
