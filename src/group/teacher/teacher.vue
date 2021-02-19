@@ -6,10 +6,10 @@
           <img alt="图标读取失败" src="../../assets/img/font.jpg" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
-          <!--          <MenuItem name="gradeManage">-->
-          <!--            <Icon type="ios-create-outline" />-->
-          <!--            <span>成绩管理</span>-->
-          <!--          </MenuItem>-->
+          <MenuItem id="gradeManage" name="gradeManage" v-show="false">
+            <Icon type="ios-create-outline" />
+            <span>成绩管理</span>
+          </MenuItem>
           <MenuItem name="courseManage">
             <Icon type="ios-albums-outline" />
             <span>课程管理</span>
@@ -114,11 +114,17 @@ export default {
     initMenuActive() {
       this.activeName = this.$route.name;
       this.$nextTick(() => {
-        document.querySelector(
-          "#layout-header-title"
-        ).innerHTML = document.querySelector(
-          ".ivu-menu-item-selected"
-        ).innerHTML;
+        if (this.$route.path.indexOf("gradeManage") === -1) {
+          document.querySelector(
+            "#layout-header-title"
+          ).innerHTML = document.querySelector(
+            ".ivu-menu-item-selected"
+          ).innerHTML;
+        } else {
+          document.querySelector(
+            "#layout-header-title"
+          ).innerHTML = document.querySelector("#gradeManage").innerHTML;
+        }
       });
       this.UserName = localStorage.getItem("username");
     },

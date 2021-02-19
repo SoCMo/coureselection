@@ -21,9 +21,13 @@
 }
 
 .ivu-table-wrapper{
-  margin-top: 0px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  margin: 0 20px 20px;
   box-shadow:0 0 4px rgba(0,0,0,0.3),0 0 10px rgba(0,0,0,0.1) inset;
+}
+
+#className{
+  float: left;
+  font-size: 1.5em;
+  margin-left: 2%;
+  margin-top: 1%;
 }

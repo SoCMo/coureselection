@@ -96,7 +96,12 @@
           <Button type="error" size="large" @click="del">删除</Button>
         </div>
       </Modal>
-      <Modal v-model="modal_info" title="课程详情" width="800">
+      <Modal
+        v-model="modal_info"
+        title="课程详情"
+        width="800"
+        @on-cancel="cancel_model_info"
+      >
         <Form :label-width="100" :model="updatedCourse_info">
           <Row>
             <Col span="10">
@@ -144,11 +149,19 @@
             </Col>
             <Col span="14">
               <FormItem label="上课时间:">
-                <Button type="success" @click="addTime" v-if="!disable_imple"
+                <Button type="success" @click="addTime" v-show="!disable_imple"
                   >添加<Icon type="md-add"
                 /></Button>
               </FormItem>
               <div v-for="(item, i) in timeData" class="courseTime" :key="i">
+                <Icon
+                  type="md-close"
+                  v-show="!disable_imple"
+                  @click="deleteTime(i)"
+                  :color="color[i]"
+                  @mouseover.native="deleteOver(i)"
+                  @mouseout.native="deleteOut(i)"
+                />
                 周
                 <label>
                   <Select
@@ -191,16 +204,13 @@
                 </label>
                 <label v-if="item.endTime < item.beginTime">
                   <Icon type="ios-sad" />
-                  时间格式错误
+                  错误
                 </label>
               </div>
             </Col>
           </Row>
         </Form>
         <div slot="footer">
-          <Button type="info" size="large" @click="cancel_model_info"
-            >取消
-          </Button>
           <Button
             type="warning"
             size="large"
@@ -237,6 +247,7 @@ export default {
       modal_delete: false,
       modal_info: false,
       disable_imple: true,
+      color: [],
       weekTime: [
         {
           value: "一",
@@ -397,7 +408,7 @@ export default {
                       console.info(params);
                       this.$router.push({
                         name: "gradeManage",
-                        query: { id: params.row.id }
+                        query: { id: params.row.id, name: params.row.name }
                       });
                     }
                   }
@@ -521,6 +532,7 @@ export default {
       this.modal_info = true;
       this.updatedCourse_info = JSON.parse(JSON.stringify(this.data[index]));
       this.timeData = [];
+      this.color = [];
       let dayArray = this.updatedCourse_info.courseTime.split(";");
       for (let day of dayArray) {
         if (day === "" || day == null) continue;
@@ -530,6 +542,7 @@ export default {
         item.beginTime = parseInt(onTheDay.split("-")[0]);
         item.endTime = parseInt(onTheDay.split("-")[1]);
         this.timeData.push(item);
+        this.color.push("#000000");
       }
     },
     cancel_model_info() {
@@ -574,7 +587,7 @@ export default {
         this.$nextTick(() => {
           this.modal_info = true;
         });
-        this.disable_imple = true;
+        this.disable_imple = false;
         this.loading_change = false;
         this.modal_info = false;
       }
@@ -595,6 +608,7 @@ export default {
         endTime: 1
       };
       this.timeData.push(item);
+      this.color.push("#000000");
     },
     saveTime() {
       this.updatedCourse_info.courseTime = "";
@@ -609,6 +623,16 @@ export default {
           ";"
         );
       }
+    },
+    deleteTime(index) {
+      this.timeData.splice(index, 1);
+      this.color.splice(index, 1);
+    },
+    deleteOver(i) {
+      this.$set(this.color, i, "#FF0000");
+    },
+    deleteOut(i) {
+      this.$set(this.color, i, "#000000");
     }
   }
 };
