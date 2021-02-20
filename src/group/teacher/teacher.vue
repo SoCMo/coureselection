@@ -3,7 +3,7 @@
     <Layout style="height: 100vh;">
       <Sider :width="250">
         <div class="layout-logo-left">
-          <img alt="图标读取失败" src="../../assets/img/font.jpg" />
+          <img alt="图标读取失败" src="../../assets/img/font.png" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
           <MenuItem id="gradeManage" name="gradeManage" v-show="false">
