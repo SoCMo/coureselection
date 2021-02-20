@@ -6,6 +6,10 @@
           <img alt="图标读取失败" src="../../assets/img/font.jpg" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
+          <MenuItem name="gradeList">
+            <Icon type="ios-create-outline"></Icon>
+            <span>成绩查询</span>
+          </MenuItem>
           <MenuItem name="courseChoice">
             <Icon type="ios-create-outline"></Icon>
             <span>选课</span>
@@ -122,7 +126,6 @@ export default {
       this.$router.push(pageName);
     },
     initIdentity() {
-      console.log(localStorage.getItem("identity"));
       this.identityString = localStorage.getItem("identity");
       if (!this.identityString) {
         this.$router.push("/login");
@@ -137,10 +140,6 @@ export default {
         if (this.identityString.indexOf("管理员") !== -1) {
           this.identity.admin = true;
         }
-
-        console.log(this.identity.student);
-        console.log(this.identity.teacher);
-        console.log(this.identity.admin);
       }
     },
     logout() {

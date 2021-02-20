@@ -27,6 +27,24 @@
         show-total
         show-elevator
       />
+      <Modal v-model="modelShowGrade" width="400">
+        <List>
+          <ListItem>
+            <div>课程名: {{ className }}</div>
+          </ListItem>
+          <ListItem>
+            平时成绩: {{ grade[0] }}<br />
+            考试成绩: {{ grade[1] }}<br />
+            总成绩: {{ grade[2] }}<br />
+          </ListItem>
+          <ListItem>
+            <div>平时成绩占比: {{ grade[3] }}%</div>
+          </ListItem>
+        </List>
+        <div slot="footer">
+          <Button type="success" @click="modelShowGrade = false">确定</Button>
+        </div>
+      </Modal>
     </Row>
   </div>
 </template>
@@ -90,14 +108,22 @@ export default {
           align: "center",
           width: 250,
           render: (h, params) => {
-            let include = this.chosen.includes(params.row.id);
+            let type = 1;
+            if (this.chosen.includes(params.row.id)) {
+              if (this.hasGrade.find(item => item.courseId === params.row.id)) {
+                type = 3;
+              } else type = 2;
+            }
+
+            let typeArray = ["info", "warning", "info"];
+            let CNArray = ["选课", "退课", "查看成绩"];
+
             return h("div", [
               h(
                 "Button",
                 {
                   props: {
-                    type: include ? "warning" : "info",
-                    disable: this.chosen.includes(params.row.id)
+                    type: typeArray[type - 1]
                   },
                   style: {
                     height: "30px",
@@ -106,15 +132,23 @@ export default {
                   },
                   on: {
                     click: () => {
-                      if (include) {
-                        this.drop(params.row.id);
-                      } else {
-                        this.choose(params.row.id);
+                      switch (type) {
+                        case 1:
+                          this.drop(params.row.id);
+                          break;
+                        case 2:
+                          this.choose(params.row.id);
+                          break;
+                        case 3:
+                          this.showGrade(params.index);
+                          break;
+                        default:
+                          break;
                       }
                     }
                   }
                 },
-                include ? "退课" : "选课"
+                CNArray[type - 1]
               )
             ]);
           }
@@ -124,7 +158,10 @@ export default {
       numberOfArr: 0,
       pageCurrent: 1,
       nowData: [],
-      chosen: []
+      chosen: [],
+      hasGrade: [],
+      modelShowGrade: false,
+      grade: []
     };
   },
   mounted() {
@@ -137,6 +174,7 @@ export default {
       this.nowData = [];
       this.numberOfArr = 0;
       this.data = [];
+      this.hasGrade = [];
       this.chosen = [];
       axios({
         url: "/api/student/list",
@@ -149,6 +187,9 @@ export default {
             });
             res.data.data.chosenList.forEach(item => {
               this.chosen.push(item);
+            });
+            res.data.data.hasGradeList.forEach(item => {
+              this.hasGrade.push(item);
             });
             this.numberOfArr = this.data.length;
             this.$Message.success(index);
@@ -228,6 +269,14 @@ export default {
           this.$Message.error("请检查网络连接！");
           this.loadingTable = false;
         });
+    },
+    showGrade(index) {
+      this.className = this.data[index].name;
+      let find = this.hasGrade.find(
+        item => item.courseId === this.data[index].id
+      );
+      this.grade = [find.usual, find.examination, find.grade, find.proportion];
+      this.modelShowGrade = true;
     }
   }
 };

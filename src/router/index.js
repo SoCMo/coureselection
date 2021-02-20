@@ -9,6 +9,7 @@ import teacher from "@/group/teacher/teacher";
 import courseManage from "@/views/teacher/courseManage/courseManage";
 import courseChoice from "@/views/student/courseChoice/courseChoice";
 import gradeManage from "@/views/teacher/gradeManage/gradeManage";
+import gradeList from "@/views/student/gradeList/gradeList";
 
 Vue.use(VueRouter);
 
@@ -41,6 +42,11 @@ const routes = [
         path: "courseChoice",
         component: courseChoice,
         name: "courseChoice"
+      },
+      {
+        path: "gradeList",
+        component: gradeList,
+        name: "gradeList"
       }
     ]
   },
