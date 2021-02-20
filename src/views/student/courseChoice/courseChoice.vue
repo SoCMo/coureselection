@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     init(index) {
-      this.loading2 = true;
+      this.loadingTable = true;
       this.pageCurrent = 1;
       this.nowData = [];
       this.numberOfArr = 0;
@@ -193,16 +193,16 @@ export default {
             });
             this.numberOfArr = this.data.length;
             this.$Message.success(index);
-            this.loading2 = false;
+            this.loadingTable = false;
           } else {
             this.$Message.error(res.data.message);
-            this.loading2 = false;
+            this.loadingTable = false;
           }
         })
         .catch(err => {
           console.error(err);
           this.$Message.error("请检查网络连接！");
-          this.loading2 = false;
+          this.loadingTable = false;
         });
     },
     refresh() {

@@ -212,7 +212,7 @@ export default {
   },
   methods: {
     init(message) {
-      this.loading2 = true;
+      this.tableLoading = true;
       this.pageCurrent = 1;
       this.nowData = [];
       this.numberOfArr = 0;
@@ -241,7 +241,7 @@ export default {
         .catch(err => {
           console.error(err);
           this.$Message.error("请检查网络连接！");
-          this.loading2 = false;
+          this.tableLoading = false;
         });
     },
     refresh() {
