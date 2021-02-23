@@ -134,10 +134,10 @@ export default {
                     click: () => {
                       switch (type) {
                         case 1:
-                          this.drop(params.row.id);
+                          this.choose(params.row.id);
                           break;
                         case 2:
-                          this.choose(params.row.id);
+                          this.drop(params.row.id);
                           break;
                         case 3:
                           this.showGrade(params.index);
@@ -182,14 +182,14 @@ export default {
       })
         .then(res => {
           if (res.data.code == 200) {
-            res.data.data.courseVoList.forEach(item => {
-              this.data.push(item);
-            });
             res.data.data.chosenList.forEach(item => {
               this.chosen.push(item);
             });
             res.data.data.hasGradeList.forEach(item => {
               this.hasGrade.push(item);
+            });
+            res.data.data.courseVoList.forEach(item => {
+              this.data.push(item);
             });
             this.numberOfArr = this.data.length;
             this.$Message.success(index);
