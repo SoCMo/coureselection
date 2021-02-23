@@ -26,5 +26,10 @@ module.exports = {
       // 开发环境配置
       config.devtool = "source-map";
     }
+    config["performance"] = {
+      //打包文件大小配置
+      maxEntrypointSize: 10000000,
+      maxAssetSize: 30000000
+    };
   }
 };

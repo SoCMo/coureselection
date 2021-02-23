@@ -216,15 +216,29 @@
             size="large"
             v-if="disable_imple"
             @click="disable_imple = false"
-            >修改</Button
+          >修改
+          </Button
           >
           <Button
-            type="success"
-            size="large"
-            :loading="loading_change"
-            v-if="!disable_imple"
-            @click="save"
-            >保存</Button
+              type="success"
+              size="large"
+              :loading="loading_change"
+              v-if="!disable_imple"
+              @click="save"
+          >保存
+          </Button
+          >
+          <Button
+              v-if="!disable_imple"
+              :loading="loading_change"
+              size="large"
+              type="warning"
+              @click="
+              modal_info = false;
+              disable_imple = true;
+            "
+          >取消
+          </Button
           >
         </div>
       </Modal>
@@ -551,13 +565,16 @@ export default {
     },
     save() {
       this.loading_change = true;
-      this.saveTime();
+      if (!this.saveTime()) {
+        this.loading_change = false;
+        return;
+      }
       if (
-        this.updatedCourse_info.id &&
-        this.updatedCourse_info.credit &&
-        this.updatedCourse_info.address &&
-        this.updatedCourse_info.courseTime &&
-        this.updatedCourse_info.capacity
+          this.updatedCourse_info.id &&
+          this.updatedCourse_info.credit &&
+          this.updatedCourse_info.address &&
+          this.updatedCourse_info.courseTime &&
+          this.updatedCourse_info.capacity
       ) {
         axios({
           url: "/api/teacher/update",
@@ -613,16 +630,21 @@ export default {
     saveTime() {
       this.updatedCourse_info.courseTime = "";
       for (let day of this.timeData) {
+        if (day.beginTime > day.endTime) {
+          this.$Message.error("时间格式错误！");
+          return false;
+        }
         this.updatedCourse_info.courseTime = this.updatedCourse_info.courseTime.concat(
-          "周",
-          day.weekday,
-          ":",
-          day.beginTime,
-          "-",
-          day.endTime,
-          ";"
+            "周",
+            day.weekday,
+            ":",
+            day.beginTime,
+            "-",
+            day.endTime,
+            ";"
         );
       }
+      return true;
     },
     deleteTime(index) {
       this.timeData.splice(index, 1);
