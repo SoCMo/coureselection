@@ -212,9 +212,9 @@
         </Form>
         <div slot="footer">
           <Button
-              type="warning"
-              size="large"
               v-if="disable_imple"
+              size="large"
+              type="warning"
               @click="disable_imple = false"
           >修改
           </Button>
