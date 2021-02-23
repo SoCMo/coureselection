@@ -212,22 +212,20 @@
         </Form>
         <div slot="footer">
           <Button
-            type="warning"
-            size="large"
-            v-if="disable_imple"
-            @click="disable_imple = false"
-          >修改
-          </Button
-          >
-          <Button
-              type="success"
+              type="warning"
               size="large"
-              :loading="loading_change"
+              v-if="disable_imple"
+              @click="disable_imple = false"
+          >修改
+          </Button>
+          <Button
               v-if="!disable_imple"
+              :loading="loading_change"
+              size="large"
+              type="success"
               @click="save"
           >保存
-          </Button
-          >
+          </Button>
           <Button
               v-if="!disable_imple"
               :loading="loading_change"
@@ -238,8 +236,7 @@
               disable_imple = true;
             "
           >取消
-          </Button
-          >
+          </Button>
         </div>
       </Modal>
     </Row>
