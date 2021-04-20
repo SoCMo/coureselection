@@ -1,13 +1,11 @@
 <template>
   <div>
-    <Row>
+    <Row justify="end">
       <div class="button">
-        <Button type="success" class="refresh_button" @click="refresh"
-          >刷新</Button
-        >
+        <Button type="success" class="refresh_button" @click="refresh">刷新</Button>
       </div>
     </Row>
-    <Row>
+    <Row justify="center">
       <Table
         size="large"
         no-data-text="当前没有可供选择的课程"
@@ -23,12 +21,11 @@
         :page-size="10"
         @on-change="changepage"
         :current="pageCurrent"
-        style="text-align: center"
         show-total
         show-elevator
       />
       <Modal v-model="modelShowGrade" width="400">
-        <List>
+        <List v-if="this.className">
           <ListItem>
             <div>课程名: {{ className }}</div>
           </ListItem>
@@ -115,6 +112,7 @@ export default {
               } else type = 2;
             }
 
+            console.log(type)
             let typeArray = ["info", "warning", "info"];
             let CNArray = ["选课", "退课", "查看成绩"];
 
@@ -133,10 +131,10 @@ export default {
                   on: {
                     click: () => {
                       switch (type) {
-                        case 1:
+                        case 2:
                           this.drop(params.row.id);
                           break;
-                        case 2:
+                        case 1:
                           this.choose(params.row.id);
                           break;
                         case 3:
@@ -169,40 +167,42 @@ export default {
   },
   methods: {
     init(index) {
-      this.loading2 = true;
       this.pageCurrent = 1;
       this.nowData = [];
       this.numberOfArr = 0;
       this.data = [];
       this.hasGrade = [];
       this.chosen = [];
+      this.loadingTable = true;
       axios({
         url: "/api/student/list",
         method: "get"
       })
         .then(res => {
           if (res.data.code == 200) {
-            res.data.data.courseVoList.forEach(item => {
-              this.data.push(item);
-            });
             res.data.data.chosenList.forEach(item => {
               this.chosen.push(item);
             });
             res.data.data.hasGradeList.forEach(item => {
+              item.electionNum = item.electionNum == null ? 0 : item.electionNum;
               this.hasGrade.push(item);
+            });
+            res.data.data.courseVoList.forEach(item => {
+              item.electionNum = item.electionNum == null ? 0 : item.electionNum;
+              this.data.push(item);
             });
             this.numberOfArr = this.data.length;
             this.$Message.success(index);
-            this.loading2 = false;
+            this.loadingTable = false;
           } else {
             this.$Message.error(res.data.message);
-            this.loading2 = false;
+            this.loadingTable = false;
           }
         })
         .catch(err => {
           console.error(err);
           this.$Message.error("请检查网络连接！");
-          this.loading2 = false;
+          this.loadingTable = false;
         });
     },
     refresh() {

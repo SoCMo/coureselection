@@ -1,12 +1,10 @@
 I<template>
   <div class="wrapper">
     <div class="content">
-      <Tabs>
-        <TabPane label="个人信息">
           <Form
             :model="person_info"
             :label-width="80"
-            style="width: 500px"
+            style="width: 500px;text-align: center"
             size="large"
           >
             <FormItem label="姓名:">
@@ -23,7 +21,7 @@ I<template>
             <br />
             <FormItem label="手机:">
               <label>
-                <Input v-model="person_info.phone" :disabled="disable_impl" />
+                <Input v-model="person_info.mobilePhone" :disabled="disable_impl" />
               </label>
             </FormItem>
             <br />
@@ -65,35 +63,6 @@ I<template>
               >
             </div>
           </Form>
-        </TabPane>
-        <TabPane label="部门信息">
-          <Form
-            :model="department_info"
-            :label-width="80"
-            style="width: 500px;"
-            size="large"
-          >
-            <FormItem label="部门:">
-              <label>
-                <Input :value="department_info.departmentName" readonly />
-              </label>
-            </FormItem>
-            <br />
-            <FormItem label="联系电话:">
-              <label>
-                <Input :value="department_info.telphone" readonly />
-              </label>
-            </FormItem>
-            <br />
-            <FormItem label="邮箱:">
-              <label>
-                <Input :value="department_info.email" readonly />
-              </label>
-            </FormItem>
-            <br />
-          </Form>
-        </TabPane>
-      </Tabs>
       <br />
     </div>
   </div>
@@ -163,7 +132,7 @@ export default {
         data: {
           userId: this.person_info.userId,
           email: this.person_info.email,
-          phone: this.person_info.phone
+          phone: this.person_info.mobilePhone
         }
       })
         .then(res => {

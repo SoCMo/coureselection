@@ -31,7 +31,7 @@ const routes = [
   {
     path: "/student",
     component: student,
-    redirect: { name: "myInfo" },
+    redirect: { name: "courseChoice" },
     children: [
       {
         path: "myInfo",

@@ -3,16 +3,16 @@
     <Layout style="height: 100vh;">
       <Sider :width="250">
         <div class="layout-logo-left">
-          <img alt="图标读取失败" src="../../assets/img/font.jpg" />
+          <img alt="图标读取失败" src="../../assets/img/font.png" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
+          <MenuItem name="courseChoice">
+            <Icon type="ios-add-circle-outline" />
+            <span>选课管理</span>
+          </MenuItem>
           <MenuItem name="gradeList">
             <Icon type="ios-create-outline"></Icon>
-            <span>成绩查询</span>
-          </MenuItem>
-          <MenuItem name="courseChoice">
-            <Icon type="ios-create-outline"></Icon>
-            <span>选课</span>
+            <span>我的课程</span>
           </MenuItem>
           <MenuItem name="myInfo">
             <Icon type="ios-person"></Icon>
@@ -117,7 +117,7 @@ export default {
         document.querySelector(
           "#layout-header-title"
         ).innerHTML = document.querySelector(
-          ".ivu-menu-item-selected"
+          ".ivu-menu-item-selected span"
         ).innerHTML;
       });
       this.UserName = localStorage.getItem("username");

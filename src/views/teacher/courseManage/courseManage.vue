@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Row>
+    <Row justify="end">
       <div class="button">
         <Button type="success" class="refresh_button" @click="refresh"
           >刷新</Button
@@ -54,7 +54,7 @@
         </Modal>
       </div>
     </Row>
-    <Row>
+    <Row justify="center">
       <Table
         size="large"
         no-data-text="您当前没有可供管理的课程"
@@ -70,7 +70,6 @@
         :page-size="10"
         @on-change="changepage"
         :current="pageCurrent"
-        style="text-align: center"
         show-total
         show-elevator
       />

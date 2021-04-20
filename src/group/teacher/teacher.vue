@@ -3,7 +3,7 @@
     <Layout style="height: 100vh;">
       <Sider :width="250">
         <div class="layout-logo-left">
-          <img alt="图标读取失败" src="../../assets/img/font.jpg" />
+          <img alt="图标读取失败" src="../../assets/img/font.png" />
         </div>
         <Menu :active-name="activeName" width="251px" @on-select="push">
           <MenuItem id="gradeManage" name="gradeManage" v-show="false">
@@ -61,7 +61,7 @@
                     >
                   </DropdownMenu>
                 </Dropdown>
-                <DropdownItem @click.native="$router.push('myInfo')"
+                <DropdownItem @click.native="$router.push('teacher_myInfo')"
                   >我的信息</DropdownItem
                 >
                 <DropdownItem divided @click.native="logout">登出</DropdownItem>
@@ -118,7 +118,7 @@ export default {
           document.querySelector(
             "#layout-header-title"
           ).innerHTML = document.querySelector(
-            ".ivu-menu-item-selected"
+            ".ivu-menu-item-selected span"
           ).innerHTML;
         } else {
           document.querySelector(

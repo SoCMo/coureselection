@@ -2,6 +2,7 @@
   margin-top: 10px !important;
   margin-right: 30px;
   margin-bottom: 10px !important;
+  position: relative;
   float: right;
 }
 
@@ -21,7 +22,7 @@
 }
 
 .ivu-table-wrapper{
-  margin-top: 0px;
+  margin-top: 0px !important;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 20px;

@@ -1,13 +1,11 @@
 <template>
   <div>
-    <Row>
+    <Row justify="end">
       <div class="button">
-        <Button type="success" class="refresh_button" @click="refresh"
-          >刷新</Button
-        >
+        <Button type="success" class="refresh_button" @click="refresh">刷新</Button>
       </div>
     </Row>
-    <Row>
+    <Row justify="center">
       <Table
         size="large"
         no-data-text="成绩暂未公布"
@@ -23,7 +21,6 @@
         :page-size="10"
         @on-change="changepage"
         :current="pageCurrent"
-        style="text-align: center"
         show-total
         show-elevator
       />

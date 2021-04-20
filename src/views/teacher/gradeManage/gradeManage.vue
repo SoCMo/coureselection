@@ -1,9 +1,7 @@
 <template>
   <div>
-    <Row>
+    <Row justify="end">
       <div>
-        <div id="className">《{{ this.$route.query.name }}》学生成绩管理</div>
-
         <div class="button">
           <Button type="success" class="refresh_button" @click="refresh"
             >刷新</Button
@@ -14,7 +12,7 @@
         </div>
       </div>
     </Row>
-    <Row>
+    <Row justify="center">
       <Table
         size="large"
         no-data-text="当前课程还未有学生加入"
